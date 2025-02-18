@@ -1,0 +1,74 @@
+#!/bin/sh
+# IC231 setup script for AIC students
+# Last modified 1/14/24 Jinhua Wang
+#
+
+# set license file
+CDS_LIC_FILE=5280@license2.ece.virginia.edu
+#LM_LICENSE_FILE=$CDS_LIC_FILE
+LM_LICENSE_FILE=1717@license2.ece.virginia.edu
+MGLS_LICENSE_FILE=$LM_LICENSE_FILE
+
+# set path
+BASE_DIR=/app7/cadence
+IC=$BASE_DIR/IC231
+MMSIM=$BASE_DIR/SPECTRE231
+IC_PATH=$IC/bin:$IC/tools/bin:$IC/tools/dfII/bin:$IC/tools/cdnshelp/bin:$IC/tools/stream_mgt/bin:$IC/tools/cdsdoc/bin:$IC/tools/plot/bin:$IC/tools/gcf/bin:$IC/tools/vframe/bin:$IC/tools/concice/bin:$IC/tools/coeffgen/bin:$IC/tools/dracula/bin:$IC/tools/sfe/bin:$IC/tools/verity/_ssol26/bin:$IC/tools/verity/bin:$IC/tools/mdl/bin:$IC/tools/tlfUtil/bin:$IC/tools/modelwriter/bin:$IC/tools/leapfrog/bin:$IC/tools/pearl/bin:$IC/tools/systemc/bin
+MMSIM_PATH=$MMSIM/bin:$MMSIM/tools.lnx86/bin:$MMSIM/tools.lnx86/spectre/bin:$MMSIM/tools.lnx86/spectre/ahdlcmi/bin
+
+# Calibre
+MGC_HOME=/app7/mentor/aok_cal_2024.4_12.9
+MGC_PATH=$MGC_HOME:$MGC_HOME/bin
+
+#Cadence Incisive set path
+#INCISIVE=$BASE_DIR/INCISIVE152
+#INCISIVE_PATH=$INCISIVE/bin:$INCISIVE/tools/affirma_ams/bin/64bit:$INCISIVE/tools/bin:$INCISIVE/tools/affirma_ams/bin
+
+#Cadence Xcelium set path
+XCELIUM=$BASE_DIR/XCELIUM2409
+XCELIUM_PATH=$XCELIUM/bin:$XCELIUM/tools/affirma_ams/bin/64bit:$XCELIUM/tools/bin:$XCELIUM/tools/affirma_ams/bin
+
+#Cadence Innovus set path
+INNOVUS=$BASE_DIR/INNOVUS191
+INNOVUS_PATH=$INNOVUS/bin:$INNOVUS/tools/bin:$INNOVUS/tools.lnx86/bin:/apps/ame/bin
+
+#Cadence Stratus set path
+STRATUS=$BASE_DIR/STRATUS2302
+STRATUS_PATH=$STRATUS/bin
+
+# set path
+PATH=$IC_PATH:$MMSIM_PATH:$INCISIVE_PATH:$XCELIUM_PATH:$INNOVUS_PATH:$MGC_PATH:$STRATUS_PATH:$PATH
+
+
+# set LD_LIBRARY PATH
+#LD_LIBRARY_PATH=/lib64/:/lib:/usr/lib64:$IC/tools/lib:$LD_LIBRARY_PATH
+
+# set Cadence home
+CDSHOME=$IC
+
+# export variables
+ulimit -f unlimited
+export CDS_LIC_FILE PATH LD_LIBRARY_PATH LM_LICENSE_FILE MGLS_LICENSE_FILE CDSHOME MGC_HOME 
+
+# setenv for auCdl for LVS/PEX
+export CDS_AUTO_64BIT=ALL
+export CDS_Netlisting_Mode=Analog
+export USE_AGILE_UI=t
+export cdlNetlist_Type=fnl
+
+echo "
+Cadence and Calibre environment is set up."
+
+# setenv for auCdl for LVS/PEX
+export PDK_DIR=/app/lib/freepdk45/trunk
+# copy required files from recommended area /app6/TSMC/... 
+ cp ${PDK_DIR}/ncsu_basekit/cdssetup/cdsinit ${PWD}/.cdsinit
+ cp ${PDK_DIR}/ncsu_basekit/cdssetup/cds.lib ${PWD}/cds.lib
+ cp ${PDK_DIR}/ncsu_basekit/cdssetup/lib.defs ${PWD}/lib.defs
+ cp /app6/TSMC/Free45PDK/cadence/45_hspice_nom.include ${PWD}/.
+
+export CDS_Netlisting_Mode=Analog
+
+virtuoso &
+
+
